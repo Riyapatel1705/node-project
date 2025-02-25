@@ -21,11 +21,11 @@ const users = [
     { firstName: "purvi", lastName: "patel", email: "purvi@gmail.com", age: 23, phoneNo: "+919112458970", gender: "female", address: "706,new green Residency,Rajkot, Gujarat, India,360001", password: "345@wxyz",joinedDate:'23/01/2024' }
 ];
 
-// ✅ Function to validate phone number based on country
+//Function to validate phone number based on country
 const validatePhonenumber = (value, helpers) => {
     const formattedPhone = value.replace(/\s+/g, ""); // Remove spaces
 
-    // ✅ Allowed country and phone number mapping
+    //  Allowed country and phone number mapping
     const countryPhoneMap = {
         "india": "+91",
         "canada": "+1",
@@ -36,7 +36,7 @@ const validatePhonenumber = (value, helpers) => {
         "australia": "+61"
     };
 
-    // ✅ Extract country from Address
+    // Extract country from Address
     const addressLower = helpers.state.ancestors[0].address.toLowerCase();
     const country = Object.keys(countryPhoneMap).find(c => addressLower.includes(c));
 
@@ -46,12 +46,12 @@ const validatePhonenumber = (value, helpers) => {
 
     const expectedCode = countryPhoneMap[country];
 
-    // ✅ Check if phone number starts with the expected code
+    //  Check if phone number starts with the expected code
     if (!formattedPhone.startsWith(expectedCode)) {
         return helpers.message(`Phone number must start with ${expectedCode} for ${country}`);
     }
 
-    // ✅ Validate phone number length
+    //  Validate phone number length
     const phonePatterns = {
         "+91": /^\+91\d{10}$/,
         "+1": /^\+1\d{10}$/,
@@ -66,7 +66,7 @@ const validatePhonenumber = (value, helpers) => {
     return formattedPhone;
 };
 
-// ✅ Joi Schema for Validation
+// Joi Schema for Validation
 const require_params = joi.object({
 firstName: joi.string().min(3).max(8).pattern(/^[a-z]+([A-Z][a-z]*)*$/).required(),
 lastName: joi.string().min(3).max(8).pattern(/^[a-z]+([A-Z][a-z]*)*$/).required(),
@@ -104,7 +104,7 @@ lastName: joi.string().min(3).max(8).pattern(/^[a-z]+([A-Z][a-z]*)*$/).required(
     })
 });
 
-// ✅ API to Check if User Exists
+// API to Check if User Exists
 app.post("/check-user", (req, res) => {
     const { error } = require_params.validate(req.body);
 
@@ -129,11 +129,11 @@ app.post("/check-user", (req, res) => {
     }
 });
 
-// ✅ API to Add User with Phone Number and Address Validation
+// API to Add User with Phone Number and Address Validation
 app.post("/add-user", (req, res) => {
     const { phoneNo, password } = req.body;
 
-    // ✅ Check for duplicate phone numbers
+    //  Check for duplicate phone numbers
     const isDuplicatePhone = users.some(user => 
         user.phoneNo.replace(/\s+/g, "").toLowerCase() === phoneNo.replace(/\s+/g, "").toLowerCase()
     );
@@ -148,7 +148,7 @@ app.post("/add-user", (req, res) => {
         return res.status(400).json({ success: false, message: "Phone number already exists! Please use a unique number." });
     }
 
-    // ✅ Validate user input
+    //  Validate user input
     const { error } = require_params.validate(req.body);
     if (error) {
         return res.status(400).json({ success: false, message: error.details[0].message });
@@ -158,7 +158,7 @@ app.post("/add-user", (req, res) => {
     return res.status(201).json({ success: true, message: "User added successfully!", users });
 });
 
-// ✅ Start the Server
+//  Start the Server
 app.listen(PORT, () => {
     console.log(`✅ Server is running at: http://localhost:${PORT}`);
 });

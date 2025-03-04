@@ -1,46 +1,30 @@
-const express=require('express');
+const express = require('express');// import express for server establishment
+const bcrypt = require('bcryptjs');//import for password hashing
+const db = require('./config/db');// import database connection
+const bodyParser = require('body-parser');//import to parse incoming requests
+const path = require('path');//to configure current directorie
+const authRoutes = require('./routes/authRoutes');
 
-const bodyParser = require('body-parser');
-const path = require('path');
-const {verifyToken}=require('./config/auth');
-const { register, login } = require('./controllers/authController');
-const { dashboard } = require('./controllers/userController');
+require('dotenv').config();// extract env 
 
-require('dotenv').config
+const app = express();//define express middleware
+const port = 3000;//define the port
 
-const app=express();
-const port=3000;
+// Middleware
+app.use(express.json()); //use express middleware
+app.use(bodyParser.urlencoded({ extended: false }));//parse the incoming requests that are URL encoded
+app.use(express.static(path.join(__dirname, 'public')));
 
-//middleware
-app.use(bodyParser.urlencoded({extended:false}));
-app.use(express.json());
-app.set('view-engine','ejs');
-app.set('views',path.join(__dirname,'views'));
+// Routes
+app.use('/', authRoutes);
 
-app.get('/register',(req,res)=>{
-    res.render('register');
+// Start the server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
 
-app.post('/register',register);
 
-//user login
-app.get('/login', (req, res) => {
-    res.render('login');
-});
 
-app.post('/login', login);
-
-//protected Route//
-app.get('/dashboard', verifyToken, dashboard);
-//logout route
-app.get('/logout', (req, res) => {
-    // Here you can handle the logout process (e.g., destroy the session or token)
-    res.redirect('/login'); // Redirect to login page after logout
-});
-
-// Start Server
-app.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}`);
-});
 
 

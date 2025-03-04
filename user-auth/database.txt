@@ -1,0 +1,10 @@
+****steps to create a user table in MySQL****
+
+->>open MySQL commandline
+->>add password(riya@71#patel)
+->>create database named my_database
+->>use my_database
+->>create table users:
+    create table users(id int primary key, first_name varchar(255), last_name varchar(255), email varchar(255) unique, password varchar(255));
+ ->>grant all the privileges to new created user
+ ->>flush the privileges   

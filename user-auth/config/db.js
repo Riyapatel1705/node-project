@@ -1,6 +1,7 @@
 const mysql=require('mysql2');
 require('dotenv').config();
 
+//connect your project folder with MySQL
 const db=mysql.createConnection({
     host:process.env.DB_HOST,
     user:process.env.DB_USER,
@@ -8,6 +9,7 @@ const db=mysql.createConnection({
     database:process.env.DB_NAME,
 });
 
+//check for the connection with errors
 db.connect((err)=>{
     if(err){
         throw err;
